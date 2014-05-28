@@ -1,0 +1,21 @@
+----------------------------------------------
+PART 1 (its all basics)
+----------------------------------------------
+1. list the election result
+
+2. list the election result for Pune
+	a. list it down!
+	b. It is more clear if I see it sorted by Votes in descending order
+	c. Lets remove the noise, I am interested in top 5
+	d. Can I print just the runner up?
+
+3. list number of candidates per party
+
+4. list winners per constituency
+
+5. Time to see, party wise performance, yay!
+
+----------------------------------------------
+PART 2 (lets stretch a bit)
+----------------------------------------------
+6.  
