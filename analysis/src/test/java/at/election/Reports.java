@@ -1,20 +1,23 @@
 package at.election;
 
+import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 public class Reports {
     private List<Result> results;
+    private ResultComputing computing = null;
 
     @Before
     public void setup() {
         results = ElectionResult.instance.getResult();
+        computing = new ResultComputing(ElectionResult.instance);
     }
 
     @Test
@@ -24,38 +27,21 @@ public class Reports {
 
     @Test
     public void listResultForPune() {
-        Comparator<Result> comparator = (Result r1, Result r2) -> r1.getVotes().compareTo(r2.getVotes());
-
-        List<Result> pune = results.stream()
-                .filter(r -> r.getConstituency() == Constituency.PUNE)
-                .sorted(comparator.reversed())
-                .skip(0)
-                .limit(5)
-                .collect(Collectors.toList());
-
+        List<Result> pune = computing.byConstituency(Constituency.PUNE, Optional.of(5));
         pune.stream().forEach(r -> print(r));
     }
 
     @Test
     public void listResultForMumbai() {
-        Comparator<Result> comparator = (Result r1, Result r2) -> r1.getVotes().compareTo(r2.getVotes());
+        List<Result> mumbaiNorth = computing.byConstituency(Constituency.MUMBAI_NORTH, Optional.empty());
 
-        List<Result> pune = results.stream()
-                .filter(r -> r.getConstituency() == Constituency.MUMBAI_NORTH)
-                .sorted(comparator.reversed())
-                .skip(0)
-                .limit(5)
-                .collect(Collectors.toList());
-
-        pune.stream().forEach(r -> print(r));
+        mumbaiNorth.stream().forEach(r -> print(r));
     }
 
     @Test
     public void listWinnersPerConstituency() {
-        Comparator<Result> compare = (Result r1, Result r2) -> r1.getVotes().compareTo(r2.getVotes());
-
         Map<Constituency, Optional<Result>> constituencyWiseWinner = results.stream()
-                .collect(Collectors.groupingBy(Result::getConstituency, Collectors.maxBy(compare)));
+                .collect(Collectors.groupingBy(Result::getConstituency, Collectors.maxBy(ResultComputing.compareByVotes)));
 
         constituencyWiseWinner.entrySet().stream().forEach(winner -> print(winner.getValue().get()));
 
@@ -65,7 +51,6 @@ public class Reports {
     public void numberOfCandidatesPerParty() {
         Map<String, Long> candidatesPerParty = results.stream()
                 .collect(Collectors.groupingBy(Result::getParty, Collectors.counting()));
-
 
         candidatesPerParty.entrySet().stream().forEach(entry ->
                 System.out.println(entry.getKey() + "\t||\t" + entry.getValue()));
@@ -84,6 +69,31 @@ public class Reports {
 
         partyWisePerformance.entrySet().stream().forEach(entry ->
                 System.out.println(entry.getKey() + "\t||\t" + entry.getValue()));
+
+    }
+
+    @Test
+    public void totalVotesInConstituencies() {
+        Map<Constituency, Long> totalVotes = results.stream()
+                .collect(Collectors.groupingBy(Result::getConstituency, Collectors.summingLong(Result::getVotes)));
+
+        totalVotes.entrySet().stream()
+                .sorted((Map.Entry<Constituency, Long> e1, Map.Entry<Constituency, Long> e2) -> e2.getValue().compareTo(e1.getValue()))
+                .forEach(entry -> System.out.println(entry.getKey() + "\t||\t" + entry.getValue()));
+    }
+
+    @Test
+    public void partyWiseVoteShare() {
+        int totalVotes = results.stream().mapToInt(r -> r.getVotes()).sum();
+
+        BiFunction<String, Integer, Integer> percentile = (String k, Integer v) ->  (v * 100) / totalVotes;
+
+        Map<String, Integer> partyWiseVotes = results.stream()
+                .collect(Collectors.groupingBy(Result::getParty, Collectors.summingInt(Result::getVotes)));
+
+        partyWiseVotes.replaceAll(percentile);
+
+        partyWiseVotes.forEach((k, v) -> System.out.println(k + "\t||\t" + v));
 
     }
 
