@@ -1,7 +1,8 @@
-repositories {
-    mavenCentral()
+allprojects {
+    repositories {
+        mavenCentral()
+    }
 }
-
 
 ext {
     junit = "junit:junit:4.11"

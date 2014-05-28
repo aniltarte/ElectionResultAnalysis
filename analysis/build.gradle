@@ -3,5 +3,7 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 
 dependencies {
+    compile project(":data")
+
     testCompile junit
 }

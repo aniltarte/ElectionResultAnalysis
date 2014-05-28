@@ -37,6 +37,20 @@ public class Reports {
     }
 
     @Test
+    public void listResultForMumbai() {
+        Comparator<Result> comparator = (Result r1, Result r2) -> r1.getVotes().compareTo(r2.getVotes());
+
+        List<Result> pune = results.stream()
+                .filter(r -> r.getConstituency() == Constituency.MUMBAI_NORTH)
+                .sorted(comparator.reversed())
+                .skip(0)
+                .limit(5)
+                .collect(Collectors.toList());
+
+        pune.stream().forEach(r -> print(r));
+    }
+
+    @Test
     public void listWinnersPerConstituency() {
         Comparator<Result> compare = (Result r1, Result r2) -> r1.getVotes().compareTo(r2.getVotes());
 
