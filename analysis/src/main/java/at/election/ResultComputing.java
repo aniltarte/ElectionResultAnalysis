@@ -24,41 +24,41 @@ public class ResultComputing {
                 .collect(Collectors.toList());
     }
 
-    public <T> GroupBy groupBy(Function<Result, T> by) {
+    public <T> ComputeBy computeBy(Function<Result, T> by) {
         Map<T, List<Result>> result = electionResult.getResult().stream()
                 .collect(Collectors.groupingBy(by));
-        return new GroupBy(result);
+        return new ComputeBy(result);
     }
 
     private Integer totalVotes() {
         return  electionResult.getResult().stream().mapToInt(result -> result.getVotes()).sum();
     }
 
-    public class GroupBy<T> {
-        private Map<T, List<Result>> groupBy;
+    public class ComputeBy<T> {
+        private Map<T, List<Result>> computeBy;
 
-        GroupBy(Map<T, List<Result>> groupBy) {
-            this.groupBy = groupBy;
+        ComputeBy(Map<T, List<Result>> computeBy) {
+            this.computeBy = computeBy;
         }
 
         public Map<T, List<Result>> get() {
-            return groupBy;
+            return computeBy;
         }
 
         public Winner winner() {
-            List<Result> winner = groupBy.entrySet().stream()
+            List<Result> winner = computeBy.entrySet().stream()
                     .map(entry -> entry.getValue().stream().max(ResultComputing.CompareByVotes).get())
                     .collect(Collectors.toList());
             return new Winner(winner);
         }
 
         public Map<T, Long> count() {
-            return groupBy.entrySet().stream()
+            return computeBy.entrySet().stream()
                     .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().stream().count()));
         }
 
         public Map<T, Integer> sumByVotes() {
-            return groupBy.entrySet().stream()
+            return computeBy.entrySet().stream()
                     .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().stream().mapToInt(Result::getVotes).sum()));
         }
 

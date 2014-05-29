@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Reports {
     private List<Result> results;
@@ -38,21 +36,21 @@ public class Reports {
 
     @Test
     public void listWinnersPerConstituency() {
-        List<Result> winner = computing.groupBy(Result::getConstituency).winner().get();
+        List<Result> winner = computing.computeBy(Result::getConstituency).winner().get();
 
         print(winner);
     }
 
     @Test
     public void numberOfCandidatesPerParty() {
-        Map<String, Long> candidatesPerParty = computing.groupBy(Result::getParty).count();
+        Map<String, Long> candidatesPerParty = computing.computeBy(Result::getParty).count();
 
         print(candidatesPerParty);
     }
 
     @Test
     public void listPartyWisePerformance() {
-        Map<String, Long> summary = computing.groupBy(Result::getConstituency)
+        Map<String, Long> summary = computing.computeBy(Result::getConstituency)
                 .winner()
                 .summarize(Result::getParty);
 
@@ -61,14 +59,14 @@ public class Reports {
 
     @Test
     public void totalVotesInConstituencies() {
-        Map<Constituency, Integer> totalVotes = computing.groupBy(Result::getConstituency).sumByVotes();
+        Map<Constituency, Integer> totalVotes = computing.computeBy(Result::getConstituency).sumByVotes();
 
         print(totalVotes);
     }
 
     @Test
     public void partyWiseVoteShare() {
-        Map<String, Integer> share = computing.groupBy(Result::getParty).voteShare();
+        Map<String, Integer> share = computing.computeBy(Result::getParty).voteShare();
 
         print(share);
 
