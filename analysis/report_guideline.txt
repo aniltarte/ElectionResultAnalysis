@@ -9,13 +9,18 @@ PART 1 (its all basics)
 	c. Lets remove the noise, I am interested in top 5
 	d. Can I print just the runner up?
 
-3. list number of candidates per party
+3. Lets do similar to the Mumbai's result (same steps as 2a, 2b and 2c)	
 
-4. list winners per constituency
+4. list number of candidates per party
 
-5. Time to see, party wise performance, yay!
+5. list winners per constituency
+
+6. Time to see, party wise performance, yay!
+	
 
 ----------------------------------------------
-PART 2 (lets stretch a bit)
+Nice to have
 ----------------------------------------------
-6.  
+7. party wise vote share
+8. total votes in constituencies 
+9. party wise performance, runner ups
