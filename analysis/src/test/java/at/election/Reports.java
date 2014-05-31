@@ -6,18 +6,17 @@ import org.junit.Test;
 import java.util.*;
 
 public class Reports {
-    private List<Result> results;
     private ResultComputing computing = null;
 
     @Before
     public void setup() {
-        results = ElectionResult.instance.getResult();
         computing = new ResultComputing(ElectionResult.instance);
     }
 
     @Test
     public void listTheResult() {
-        results.stream().forEach(r -> print(r));
+        ElectionResult.instance.getResult().stream()
+                .forEach(r -> print(r));
     }
 
     @Test
@@ -36,21 +35,21 @@ public class Reports {
 
     @Test
     public void listWinnersPerConstituency() {
-        List<Result> winner = computing.computeBy(Result::getConstituency).winner().get();
+        List<Result> winner = computing.analyzeBy(Result::getConstituency).winner().get();
 
         print(winner);
     }
 
     @Test
     public void numberOfCandidatesPerParty() {
-        Map<String, Long> candidatesPerParty = computing.computeBy(Result::getParty).count();
+        Map<String, Long> candidatesPerParty = computing.analyzeBy(Result::getParty).count();
 
         print(candidatesPerParty);
     }
 
     @Test
     public void listPartyWisePerformance() {
-        Map<String, Long> summary = computing.computeBy(Result::getConstituency)
+        Map<String, Long> summary = computing.analyzeBy(Result::getConstituency)
                 .winner()
                 .summarize(Result::getParty);
 
@@ -59,17 +58,25 @@ public class Reports {
 
     @Test
     public void totalVotesInConstituencies() {
-        Map<Constituency, Integer> totalVotes = computing.computeBy(Result::getConstituency).sumByVotes();
+        Map<Constituency, Integer> totalVotes = computing.analyzeBy(Result::getConstituency).sumByVotes();
 
         print(totalVotes);
     }
 
     @Test
     public void partyWiseVoteShare() {
-        Map<String, Integer> share = computing.computeBy(Result::getParty).voteShare();
+        Map<String, Integer> share = computing.analyzeBy(Result::getParty).voteShare();
 
         print(share);
+    }
 
+    @Test
+    public void partyWiseRunnerUpSeats() {
+        Map<String, Long> runnerUps = computing.analyzeBy(Result::getConstituency)
+                .ranked(2)
+                .summarize(Result::getParty);
+
+        print(runnerUps);
     }
 
     private void print(List<Result> results) {

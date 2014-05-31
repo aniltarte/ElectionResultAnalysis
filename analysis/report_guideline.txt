@@ -24,3 +24,5 @@ Nice to have
 7. party wise vote share
 8. total votes in constituencies 
 9. party wise performance, runner ups
+10. Close fights
+11. One sided competition
