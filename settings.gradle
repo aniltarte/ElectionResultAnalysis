@@ -1,7 +1,5 @@
 rootProject.name = 'ElectionResultAnalysis'
-include "data"
-
 include 'data'
 
-include 'analysis'
+include 'analyzer'
 

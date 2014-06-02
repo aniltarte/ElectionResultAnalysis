@@ -7,12 +7,12 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ResultComputing {
+public class ResultAnalyzer {
     private ElectionResult electionResult;
 
     private final Comparator<Result> CompareByVotes = (Result r1, Result r2) -> r1.getVotes().compareTo(r2.getVotes());
 
-    public ResultComputing(ElectionResult electionResult) {
+    public ResultAnalyzer(ElectionResult electionResult) {
         this.electionResult = electionResult;
     }
 
@@ -75,7 +75,7 @@ public class ResultComputing {
         public Map<T, Integer> voteShare() {
             Function<Integer, Integer> percentile = vote -> (vote * 100) / totalVotes();
             return sumByVotes().entrySet().stream()
-                    // clean way is to create a custom object Pair and map Map.Entry to Pair
+                    // clean way is to create a custom object (e.g Pair) and map Map.Entry to Pair
                     .map(e -> {
                         e.setValue(percentile.apply(e.getValue()));
                         return e;

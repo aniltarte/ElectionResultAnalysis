@@ -6,17 +6,16 @@ import org.junit.Test;
 import java.util.*;
 
 public class Reports {
-    private ResultComputing computing = null;
+    private ResultAnalyzer computing = null;
 
     @Before
     public void setup() {
-        computing = new ResultComputing(ElectionResult.instance);
+        computing = new ResultAnalyzer(ElectionResult.instance);
     }
 
     @Test
     public void listTheResult() {
-        ElectionResult.instance.getResult().stream()
-                .forEach(r -> print(r));
+        ElectionResult.instance.getResult().stream().forEach(this::print);
     }
 
     @Test
@@ -80,7 +79,7 @@ public class Reports {
     }
 
     private void print(List<Result> results) {
-        results.stream().forEach(r -> print(r));
+        results.stream().forEach(this::print);
     }
 
     private void print(Result result) {
