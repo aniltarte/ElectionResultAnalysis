@@ -19,7 +19,7 @@ Project setup instructions
 
 Project Structure
 -------------------------
-It has below two modules
+It has below two modules   
 1. data - This module provides the raw election data, it reads the csv file and creates list of `at.election.Result`, which is accessed as `at.election.ElectionResult.instance.getResult()`
 
 2. analyzer - Analyzer uses data module to get ElectionResult and analyzes it to produces meaningful statistics, check out below classes
