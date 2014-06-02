@@ -20,10 +20,11 @@ Project setup instructions
 Project Structure
 -------------------------
 It has below two modules   
+
 1. data - This module provides the raw election data, it reads the csv file and creates list of `at.election.Result`, which is accessed as `at.election.ElectionResult.instance.getResult()`
 2. analyzer - Analyzer uses data module to get ElectionResult and analyzes it to produces meaningful statistics, check out below classes
-	* at.election.ElectionResultStatistics.java (present in test folder), this is how a Analyzer module's client look like.
-	* at.election.ResultAnalyzer.java (present in main folder), it is responsible to produce domain specific api's on top of raw election result, to see the result statistics
+   * at.election.ElectionResultStatistics.java (present in test folder), this is how a Analyzer module's client look like.
+   * at.election.ResultAnalyzer.java (present in main folder), it is responsible to produce domain specific api's on top of raw election result, to see the result statistics.
 
 User Stories (Domain problem in more details)
 ----------------------------------------------
